@@ -28,6 +28,9 @@ python example.py
 Rscript example.R
 ```
 
+![images](./scripts/r_example_plot.png)
+![images](./scripts/python_example_plot.png)
+
 3. Adding New Packages
 
 While working on your project, you realized that it would be convenient to call R functions in your python scripts. Install `rpy2` using the command below
@@ -49,12 +52,13 @@ Direcly installing rpy2 in the original environment would not work due to a conf
 ```bash
 rpy2 conflicts with python=3.11
 ```
-So, python 3.10 was installed instead:
+Since directly removing python 3.11 from the original environment would lead to uninstallation of many packages, python 3.10 was added to the yaml file instead to create an environment where python 3.10 and rpy2 are both installed:
 ```bash
-micromamba install python=3.10
-micromamba install rpy2 -c conda-forge
+micromamba activate bioinfo_corrected
 ```
 The new yaml file has python 3.11 changed to 3.10, and rph2 added to dependencies. Also, a prefix for the location of the environment is added.
+
+![images](./scripts/r2py_example_plots.png)
 
 Answer the following questions:
 - What micromamba command can you use to list all created environemnts?
