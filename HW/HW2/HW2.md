@@ -31,6 +31,10 @@ Try placing this before `st.title("Pairwise Sequence Aligner")`.
 
 ---
 
+![Example placeholder image](./images/screenshot_logo.png)
+
+
+
 ### Plot a Histogram of Match Values
 After alignment is computed, visualize how many positions were matches (1) vs mismatches (0).
 
@@ -44,6 +48,10 @@ Run the app locally to make sure everything works as expected.
 
 ---
 
+![Example placeholder image](./images/screenshot_hist.png)
+
+
+
 ## Part 2 - Multiple Choice Questions
 
 ### Q1.  
@@ -52,9 +60,9 @@ In Streamlit, what happens when you define and click the defined button:
 align_clicked = st.button("▶️ Align sequences")
 ```
 
-- [ ] The app runs this line only once when first loaded and won't rerun it.  
-- [ ] The app waits (pauses) until the user clicks the button before continuing.  
-- [ ] When the user clicks the button, Streamlit reruns the entire script from the top, and `align_clicked` becomes `True` for that run, allowing the code inside `if align_clicked:` to execute.  
+- [x] The app runs this line only once when first loaded and won't rerun it.  
+- [v] The app waits (pauses) until the user clicks the button before continuing.  
+- [v] When the user clicks the button, Streamlit reruns the entire script from the top, and `align_clicked` becomes `True` for that run, allowing the code inside `if align_clicked:` to execute.  
 
 ---
 
@@ -63,9 +71,9 @@ Why do we use:
 ```python
 st.plotly_chart(fig, use_container_width=True)
 ```
-- [ ] It makes the chart automatically scale to fit the available page width.  
-- [ ] It forces Streamlit to display a smaller chart.  
-- [ ] It changes how Plotly computes data ranges.  
+- [v] It makes the chart automatically scale to fit the available page width.  
+- [x] It forces Streamlit to display a smaller chart.  
+- [x] It changes how Plotly computes data ranges.  
 
 ---
 
@@ -92,6 +100,6 @@ Then, copy and paste your **Streamlit Cloud URL** below
 
 ```
 Streamlit App URL:
-https://____________________________________
+https://bios270-au25-6hvjydcfappgjyfnf8nf6tk.streamlit.app/
 ```
 Submit the `HW2.md` URL to **Canvas**.
