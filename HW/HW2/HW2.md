@@ -60,9 +60,9 @@ In Streamlit, what happens when you define and click the defined button:
 align_clicked = st.button("▶️ Align sequences")
 ```
 
-- [x] The app runs this line only once when first loaded and won't rerun it.  
-- [v] The app waits (pauses) until the user clicks the button before continuing.  
-- [v] When the user clicks the button, Streamlit reruns the entire script from the top, and `align_clicked` becomes `True` for that run, allowing the code inside `if align_clicked:` to execute.  
+- [ ] The app runs this line only once when first loaded and won't rerun it.  
+- [x] The app waits (pauses) until the user clicks the button before continuing.  
+- [x] When the user clicks the button, Streamlit reruns the entire script from the top, and `align_clicked` becomes `True` for that run, allowing the code inside `if align_clicked:` to execute.  
 
 ---
 
@@ -71,9 +71,9 @@ Why do we use:
 ```python
 st.plotly_chart(fig, use_container_width=True)
 ```
-- [v] It makes the chart automatically scale to fit the available page width.  
-- [x] It forces Streamlit to display a smaller chart.  
-- [x] It changes how Plotly computes data ranges.  
+- [x] It makes the chart automatically scale to fit the available page width.  
+- [ ] It forces Streamlit to display a smaller chart.  
+- [ ] It changes how Plotly computes data ranges.  
 
 ---
 
