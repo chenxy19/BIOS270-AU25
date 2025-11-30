@@ -1,0 +1,13 @@
+name: bioinfo_example
+channels:
+  - conda-forge
+  - pkgs/main
+dependencies:
+  - numpy
+  - pandas
+  - pip
+  - python=3.10
+  - r-base=4.3
+  - rpy2
+
+prefix: "/home/users/chenxy19/envs/micromamba/envs/bioinfo_example"
