@@ -45,17 +45,45 @@ The `--from-history` flag ensures that only explicitly installed packages are sa
 
 Compare the new YAML file (`bioinfo_example_latest.yaml`) with the original one. What changes do you notice?
 
+Direcly installing rpy2 in the original environment would not work due to a conflict with python 3.11:
+```bash
+rpy2 conflicts with python=3.11
+```
+So, python 3.10 was installed instead:
+```bash
+micromamba install python=3.10
+micromamba install rpy2 -c conda-forge
+```
+The new yaml file has python 3.11 changed to 3.10, and rph2 added to dependencies. Also, a prefix for the location of the environment is added.
+
 Answer the following questions:
 - What micromamba command can you use to list all created environemnts?
+```bash
+  micromamba env list
+```
 - What micromamba command can you use to list all packages installed in a specific environment?
+```bash
+micromamba list -n bioinfo_example
+Micromamba list
+```
 - What micromamba command can you use to remove a package?
+```bash
+micromamba remove -n bioinfo_example <package-name>
+```
 - What micromamba command can you use to install a package from a specific channel?
+```bash
+micromamba install -n bioinfo_example -c bioconda rpy2
+```
 - What micromamba command can you use to remove an environment?
-
-
+```bash
+micromamba env remove -n bioinfo_example
+```
 
 - What are all the `r-base` and `Bioconductor` packages that were installed in the `bioinfo_example` environment?
 *(Hint: You may want to use one of the commands from your answers to the above questions, and combine it with the `grep` command.)*
+```bash
+micromamba list -n bioinfo_example | grep -E "r-base|bioconductor|bioc-"
+```
 
 >Remember to push the updated environment file and example outputs to your GitHub repository. Include your output plots and any observations in your write-up.
 
@@ -74,6 +102,8 @@ You will practice writing Docker image build instruction, push it to container r
   ```bash
   singularity remote login -u $USER docker://scr.svc.stanford.edu
   ```
+singularity remote login
+On HPC does not work -_-
 
 > **Why Docker + Singularity?**  
 > Docker is great locally but **not allowed** on shared HPC for security reasons. Singularity (a.k.a. Apptainer) runs containers **without root** suitable for HPC environments.
