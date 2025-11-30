@@ -28,6 +28,9 @@ python example.py
 Rscript example.R
 ```
 
+![images](./scripts/r_example_plot.png)
+![images](./scripts/python_example_plot.png)
+
 3. Adding New Packages
 
 While working on your project, you realized that it would be convenient to call R functions in your python scripts. Install `rpy2` using the command below
@@ -45,22 +48,51 @@ The `--from-history` flag ensures that only explicitly installed packages are sa
 
 Compare the new YAML file (`bioinfo_example_latest.yaml`) with the original one. What changes do you notice?
 
+Direcly installing rpy2 in the original environment would not work due to a conflict with python 3.11:
+```bash
+rpy2 conflicts with python=3.11
+```
+Since directly removing python 3.11 from the original environment would lead to uninstallation of many packages, python 3.10 was added to the yaml file instead to create an environment where python 3.10 and rpy2 are both installed:
+```bash
+micromamba activate bioinfo_corrected
+```
+The new yaml file has python 3.11 changed to 3.10, and rph2 added to dependencies. Also, a prefix for the location of the environment is added.
+
+![images](./scripts/r2py_example_plots.png)
+
 Answer the following questions:
 - What micromamba command can you use to list all created environemnts?
+```bash
+  micromamba env list
+```
 - What micromamba command can you use to list all packages installed in a specific environment?
+```bash
+micromamba list -n bioinfo_example
+Micromamba list
+```
 - What micromamba command can you use to remove a package?
+```bash
+micromamba remove -n bioinfo_example <package-name>
+```
 - What micromamba command can you use to install a package from a specific channel?
+```bash
+micromamba install -n bioinfo_example -c bioconda rpy2
+```
 - What micromamba command can you use to remove an environment?
-
-
+```bash
+micromamba env remove -n bioinfo_example
+```
 
 - What are all the `r-base` and `Bioconductor` packages that were installed in the `bioinfo_example` environment?
 *(Hint: You may want to use one of the commands from your answers to the above questions, and combine it with the `grep` command.)*
+```bash
+micromamba list -n bioinfo_example | grep -E "r-base|bioconductor|bioc-"
+```
 
 >Remember to push the updated environment file and example outputs to your GitHub repository. Include your output plots and any observations in your write-up.
 
 
-# Container
+## 2. Container
 
 You will practice writing Docker image build instruction, push it to container registries (`Docker Hub` & `Stanford GitLab`), use Singularity to create container (`.sif`) image on Farmshare, mount your `$SCRATCH` directory to container, and run **code-server** or **JupyterLab** over an SSH tunnel.
 
@@ -74,6 +106,8 @@ You will practice writing Docker image build instruction, push it to container r
   ```bash
   singularity remote login -u $USER docker://scr.svc.stanford.edu
   ```
+singularity remote login
+On HPC does not work -_-
 
 > **Why Docker + Singularity?**  
 > Docker is great locally but **not allowed** on shared HPC for security reasons. Singularity (a.k.a. Apptainer) runs containers **without root** suitable for HPC environments.
@@ -86,7 +120,7 @@ You will practice writing Docker image build instruction, push it to container r
 - Build Docker image, this will take about 10 minutes. 
 
 ```bash
-docker build -t . bioinfo_example
+docker build --platform linux/amd64 -t bioinfo_example .
 ```
 
 - After image is built, push it to Docker Hub and Stanford Gitlab Container Registry. Before doing so, you need to tag the image name with the path to container registry. It will take a while to push the image, you know the trick, `tmux`!
@@ -95,9 +129,15 @@ docker build -t . bioinfo_example
 # Tag and push to Docker Hub
 docker tag bioinfo_example <DockerHub_Username>/bioinfo_example
 docker push <DockerHub_Username>/bioinfo_example
+```
+
+```bash
 # Tag and push to Stanford Gitlab (On another tmux session/window)
+# Connect docker with Stanford Gitlab
+docker login scr.svc.stanford.edu
+# Use your SUNetID as username and set your password at https://code.stanford.edu/-/user_settings/password/edit
 docker tag bioinfo_example scr.svc.stanford.edu/<SUNetID>/containers/bioinfo_example
-docker push <DockerHub_Username>/bioinfo_example
+docker push scr.svc.stanford.edu/<SUNetID>/containers/bioinfo_example
 ```
 
 3. Pull image to Farmshare with Singularity. You can pull from either registry
@@ -108,11 +148,17 @@ singularity pull docker://scr.svc.stanford.edu/<SUNetID>/containers/bioinfo_exam
 After finished, you should see a file `bioinfo_example_latest.sif`. That's all you need for a reproducible environment! Now run 
 
 ```bash
-singularity run `bioinfo_example_latest.sif` 
+singularity run bioinfo_example_latest.sif 
 ```
 And test if everything runs well (python, R, rclone, etc...)
 
-Create an example `python` file in your `$SCRATCH` that prints "Hello World!" and execute the file with your singularity container. Can you run it? Why do you think this is the case? *(Hint: -B flag)*
+Create an example `python` file in your `$SCRATCH` that prints "Hello World!" and execute the file with your singularity container. 
+
+```bash
+singularity run bioinfo_example_latest.sif python print_hello.py  
+```
+
+Can you run it? Why do you think this is the case? *(Hint: -B flag)*
 
 4. Writing your own `Dockerfile`
 
@@ -147,13 +193,13 @@ On **Farmshare** (remote), start the service inside the container
 
 + code-server (VS Code in the browser):
 ```bash
-singularity run -B /farmshare/users/[SUNetID],/farmshare/home/classes/bios/270 bioinformatics_latest.sif \
+singularity run -B /farmshare/user_data/[SUNetID],/farmshare/home/classes/bios/270 bioinformatics_latest.sif \
   code-server --bind-addr 127.0.0.1:<PORT> --auth none
 ```
 
 + JupyterLab:
 ```bash
-singularity run -B /farmshare/users/[SUNetID],/farmshare/home/classes/bios/270 bioinformatics_latest.sif \
+singularity run -B /farmshare/user_data/[SUNetID],/farmshare/home/classes/bios/270 bioinformatics_latest.sif \
   jupyter lab --ip 127.0.0.1 --port <PORT> \
   --NotebookApp.allow_origin='https://colab.research.google.com' \
   --NotebookApp.port_retries=0 --no-browser
